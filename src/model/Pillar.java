@@ -10,33 +10,48 @@ public class Pillar {
         projects = new Project[50];
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
-     * Descripcion: Añade un nuevo Project al arreglo projects
-     * pre: El arreglo projects debe estar inicializado
-     * pos: El arreglo projects queda modificado con el nuevo Project
-     * agregado
+     * Descripcion: Añade un nuevo Proyecto al arreglo de proyectos.
+     * pre: El arreglo de proyectos debe estar inicializado.
+     * pos: El proyecto es añadido si hay espacio disponible.
      * 
-     * @param newProject Project El Project que se va a añadir
-     * @return boolean true si se logra añadir el Project, false en caso
-     *         contrario
+     * @param newProject Project El proyecto que se va a añadir.
+     * @return boolean true si se logra añadir el proyecto, false en caso contrario.
      */
     public boolean registerProject(Project newProject) {
-
-        return false;
+        for (int i = 0; i < projects.length; i++) {
+            if (projects[i] == null) {
+                projects[i] = newProject;
+                return true; // Proyecto añadido exitosamente
+            }
+        }
+        return false; // No hay espacio disponible
     }
 
     /**
-     * Descripcion: Genera una cadena en formato lista con la información de los
-     * Project registrados en el Pillar
-     * pre: El arreglo projects debe estar inicializado
+     * Descripcion: Genera una lista con la información de los proyectos registrados en el Pilar.
+     * pre: El arreglo de proyectos debe estar inicializado.
+     * pos: Se retorna una lista con la información de los proyectos.
      * 
+     * @return String Lista de proyectos.
      */
     public String getProjectList() {
+        StringBuilder list = new StringBuilder();
+        boolean hasProjects = false;
 
-        String list = "";
-
-        return list;
+        for (Project project : projects) {
+            if (project != null) {
+                list.append("\n").append(project.getId()).append(" - ").append(project.getName());
+                hasProjects = true;
+            }
+        }
+        if (!hasProjects) {
+            return "No hay proyectos registrados en este pilar.";
+        }
+        return list.toString();
     }
-
-
 }

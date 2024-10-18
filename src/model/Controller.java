@@ -5,36 +5,80 @@ public class Controller {
     private Pillar[] pillars;
 
     public Controller() {
-
         pillars = new Pillar[4];
-
+        // Pre-cargar pilares
+        pillars[0] = new Pillar("BIODIVERSIDAD");
+        pillars[1] = new Pillar("AGUA");
+        pillars[2] = new Pillar("TRATAMIENTO DE BASURAS");
+        pillars[3] = new Pillar("ENERGIA");
     }
 
     /**
-     * Descripcion: Permite crear y añadir un Project en un Pillar en el sistema
+     * Descripcion: Permite crear y añadir un Proyecto en un Pilar en el sistema.
+     * pre: El arreglo de pilares debe estar inicializado.
+     * pos: El proyecto es registrado en el pilar correspondiente.
      * 
-     * @return boolean true si se logra añadir el Prject en el Pillar, false en caso
-     *         contrario
+     * @param id String ID del proyecto.
+     * @param name String Nombre del proyecto.
+     * @param description String Descripción del proyecto.
+     * @param type int Número del tipo de pilar.
+     * @param status boolean Estado del proyecto.
+     * @return boolean true si el proyecto es registrado exitosamente, false en caso contrario.
      */
-    public boolean registerProjectInPillar(int pillarType, String id, String name, String description,boolean status) {
+    public boolean registerProjectInPillar(String id, String name, String description, int type, boolean status) {
+        PillarType pillarType = null;
+        switch (type) {
+            case 1:
+                pillarType = PillarType.BIODIVERSIDAD;
+                break;
+            case 2:
+                pillarType = PillarType.AGUA;
+                break;
+            case 3:
+                pillarType = PillarType.TRATAMIENTO_DE_BASURAS;
+                break;
+            case 4:
+                pillarType = PillarType.ENERGIA;
+                break;
+            default:
+                return false; // Tipo inválido
+        }
 
-        return false;
+        Project newProject = new Project(id, name, description, status, pillarType);
+        return pillars[type - 1].registerProject(newProject); // Registrar proyecto en el pilar correspondiente
     }
 
     /**
-     * Descripcion: Calcula el valor en dinero correspondiente al arrendamiento
-     * mensual de todos los Edificios
-     * pre: El arreglo edificios debe estar inicializado
+     * Descripcion: Consulta los proyectos registrados en un pilar.
+     * pre: El sistema debe estar cargado con al menos un proyecto.
+     * pos: Retorna la lista de proyectos registrados en el pilar solicitado.
      * 
-     * @return String cadena en formato lista con la información de los
-     * Project registrados en el Pillar
+     * @param pillarName String Nombre del pilar.
+     * @return String Lista de proyectos en el pilar o null si no hay proyectos.
      */
-    public String queryProjectsByPillar(int pillarType) {
-
-        String query = "";
-
-        return query;
-
+    public String queryProjectsByPillar(String pillarName) {
+        for (Pillar pillar : pillars) {
+            if (pillar != null && pillar.getName().equalsIgnoreCase(pillarName)) {
+                return pillar.getProjectList();
+            }
+        }
+        return null;
     }
 
+    /**
+     * Descripcion: Retorna una lista de todos los pilares disponibles.
+     * pre: El sistema debe estar inicializado.
+     * pos: Se retorna la lista de pilares.
+     * 
+     * @return String Lista de pilares.
+     */
+    public String getPillarList() {
+        StringBuilder list = new StringBuilder("Pilares disponibles:");
+        for (Pillar pillar : pillars) {
+            if (pillar != null) {
+                list.append("\n- ").append(pillar.getName());
+            }
+        }
+        return list.toString();
+    }
 }
